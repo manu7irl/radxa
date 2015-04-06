@@ -91,7 +91,7 @@ if [ -f boot-linux.img ]; then
                 esac
         done
 fi
-#uncomment if you have a non patched kernel source
+#uncomment it if you provided a non patched kernel source
 #patchingKernelSource
 
 buildKernelAndModules
