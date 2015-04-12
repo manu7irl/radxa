@@ -63,35 +63,6 @@ fi
 
 cd ${kalidir}
 
-#Based on kali-arm-build-scripts/mini-x - updated for ubuntu 14.04 multiarch
-echo "Download the kali-arm-build-scripts"
-mkdir kali-deps-script
-cd kali-deps-script
-cat > build-deps.sh << "EOF"
-#!/bin/bash
-apt-get install -y git-core gnupg flex bison gperf libesd0-dev build-essential \
-zip curl libncurses5-dev zlib1g-dev libncurses5-dev gcc-multilib g++-multilib \
-parted kpartx debootstrap pixz qemu-user-static abootimg cgpt vboot-kernel-utils \
-vboot-utils u-boot-tools bc lzma lzop automake autoconf m4 dosfstools pixz \
-rsync schedtool git dosfstools e2fsprogs device-tree-compiler
-
-MACHINE_TYPE=`uname -m`
-if [ ${MACHINE_TYPE} == 'x86_64' ]; then		
-    dpkg --add-architecture i386
-    apt-get update
-    apt-get install -y lib32bz2-1.0 lib32z1 
-    # Required for kernel cross compiles
-    apt-get install -y lib32ncurses5
-else
-    apt-get install -y libncurses5
-fi
-EOF
-
-chmod +x ./build-deps.sh
-
-./build-deps.sh
-
-cd ${kalidir}
 # Create the kali script file inside the debootstrap scripts folder (/usr/share/debootstrap/scripts/) 
 # credit to meefik from github - https://github.com/meefik/linuxdeploy/blob/master/assets/root/deploy/debootstrap/scripts/kali
 
