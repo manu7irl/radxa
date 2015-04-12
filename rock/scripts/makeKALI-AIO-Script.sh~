@@ -1,0 +1,59 @@
+#!/bin/bash
+##########################################################################################################
+# Paths and variables
+##########################################################################################################
+
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd ${scriptdir}
+cd ..
+basedir=$(pwd)
+cd ..
+radxadir=$(pwd)
+cd ${basedir}
+
+# read config-file
+source ${basedir}/build.cfg
+
+
+##########################################################################################################
+# Program
+##########################################################################################################
+
+echo "Download Building Tools"
+cd ${scriptdir}
+./getTools.sh
+echo "Download Kernel source"
+cd ${scriptdir}
+./getKernelSource.sh
+echo "Create .config from DefConfig for Radxa Rock"
+cd ${scriptdir};
+./createKernelConfig.sh;
+echo "Build kernel and patchit for kali rootfs"
+cd ${scriptdir}
+./createBootImage.sh
+echo "Create RootFs for kali source"
+cd ${scriptdir}
+./createKaliRootfs.sh
+
+while true; do
+	read -p "Which Image Type do you want? [N]and Image or [S]d card Image ?" ns
+	case $ns in
+	[Nn]* ) 
+	echo "Create Nand Image";
+	cd ${scriptdir};
+	./createNandImg.sh;
+	exit;;
+	[Ss]* ) 
+	echo "Create SD Image";
+	cd ${scriptdir};
+	./createSDImg.sh;
+	exit;;
+	* )     echo "Please answer [n] or [s].";;
+                esac
+done
+
+echo "Post Installaton script"
+cd ${scriptdir}
+./post-installation.sh
+
+
